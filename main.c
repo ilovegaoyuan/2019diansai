@@ -25,7 +25,7 @@ void main(void)
 	RegisterData[1] = 0x00;
 	RegisterData[0] = 0x00;
 	WriteToAD9959ViaSpi(0x01,3,RegisterData);//VCO gain control = 1, system clock = 500MHz
-	R=0x00000011;
+	R=0x00000010;
 //	RegisterData[3] = 0x25;
 //	RegisterData[2] = 0x1E;
 //	RegisterData[1] = 0xB8;
@@ -40,16 +40,17 @@ void main(void)
 //	ReadFromAD9959ViaSpi(0x80,1,RegisterData);
 	while(1)
 	{
-		if(R>=0x10000000)
+		if(R>=0x66666666)
 		{
-			R=0x00000001;
-			for(i=0;i<1000;i++)
-					delay(1000);
+			R=0x00000008;
+			for(i=0;i<10000;i++)
+					delay(10000);
 		}
-		R=R<<1;
+		R=R+(R>>3);
 //		printf("%d",R);
 
-		Rx = R * 10;
+		//Rx = R * 10;
+		Rx=R;
 		RegisterData[0] = Rx & 0x000000FF;
 		RegisterData[1] = (Rx & 0x0000FF00)>>8;
 		RegisterData[2] = (Rx & 0x00FF0000)>>16;
@@ -57,8 +58,8 @@ void main(void)
 		WriteToAD9959ViaSpi(0x04,4,RegisterData);//Output frequency = 10MHz
 
 		IO_Update();
-		for(i=0;i<200;i++)
-		delay(1000);
+		for(i=0;i<500;i++)
+		delay(100);
 	}
 
 }
