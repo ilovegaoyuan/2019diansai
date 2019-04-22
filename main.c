@@ -35,7 +35,12 @@ void main(void)
 //	RegisterData[2] = (R&0xFF0000)>>16;
 //	RegisterData[3] = (R&0xFF000000)>>24;
 //	WriteToAD9959ViaSpi(0x04,4,RegisterData);//Output frequency = 10MHz
-
+	
+	RegisterData[2] = 0xff;
+	RegisterData[1] = 0x37;//bit[12:11] 10:manual 11:auto
+	RegisterData[0] = 0x00;//bit[10:0] amplitude
+	WriteToAD9959ViaSpi(0x06,3,RegisterData);
+	
 	//IO_Update();
 //	ReadFromAD9959ViaSpi(0x80,1,RegisterData);
 	while(1)
