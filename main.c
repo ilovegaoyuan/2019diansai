@@ -26,6 +26,12 @@ void main(void)
 	RegisterData[0] = 0x00;
 	WriteToAD9959ViaSpi(0x01,3,RegisterData);//VCO gain control = 1, system clock = 500MHz
 	R=0x00000010;
+	
+	RegisterData[2] = 0xff;		
+	RegisterData[1] = 0x36;//[12:11] 10:manual 11:auto
+	RegisterData[0] = 0xff;//[10:0] amplitude
+	WriteToAD9959ViaSpi(0x01,3,RegisterData);//amplitude 10_1111_1111
+	
 //	RegisterData[3] = 0x25;
 //	RegisterData[2] = 0x1E;
 //	RegisterData[1] = 0xB8;
