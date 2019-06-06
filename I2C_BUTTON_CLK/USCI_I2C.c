@@ -9,7 +9,7 @@
 #define TX_STATE 						0					/*I2C发送状态*/
 #define RX_STATE						1					/*I2C接收状态*/
 //-----对SMCLK分频产生I2C通信波特率-----
-#define I2C_BAUDRATE_DIV 	14				/*I2C波特率控制*/
+#define I2C_BAUDRATE_DIV 	20				/*I2C波特率控制*/
 #define SLAVE_ADDR 				0x20				/*从机TCA6416A的地址*/
 static unsigned char  TxByteCnt=0;				//剩余发送数据
 static unsigned char  RxByteCnt=0;				//剩余接收数据

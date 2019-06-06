@@ -25,8 +25,8 @@ void delay (signed int length)
 void main(void)
 {
 	WDTCTL = WDTPW + WDTHOLD;	//关狗
-    BCSCTL1 = CALBC1_16MHZ;      /* Set DCO to 8MHz */
-    DCOCTL = CALDCO_16MHZ;
+    BCSCTL1 = CALBC1_8MHZ;      /* Set DCO to 8MHz */
+    DCOCTL = CALDCO_8MHZ;
     BCSCTL3 |= LFXT1S1;
     GPIO_Init();
     TCA6416A_Init();			// 初始化IO扩展口
@@ -39,33 +39,34 @@ void main(void)
 	PinOUT(5,0);           // 指定1号管脚输出为0
 	PinOUT(6,1);           // 指定0号管脚输出为0
 	PinOUT(7,0);           // 指定1号管脚输出为0
-	//WDT_init();
+	WDT_init();
 	while(1)
 	{
 		PinIN();
 		 I2C_IODect();
-		 delay(1000);
+		 //delay(1000);
+		 _bis_SR_register(LPM0_bits);
 	}
 
 
 }
 /********WDT初始化函数**********/
-//void WDT_init()
-//{
-//	//-----设定WDT为-----------
-//	WDTCTL=WDT_ADLY_16;
-//	//-----WDT中断使能----------------------
-//    IE1 |= WDTIE;
-//}
+void WDT_init()
+{
+	//-----设定WDT为-----------
+	WDTCTL=WDT_ADLY_16;
+	//-----WDT中断使能----------------------
+    IE1 |= WDTIE;
+}
 
 /***********WDT定时中断函数*************/
-//#pragma vector=WDT_VECTOR
-//__interrupt void watchdog_timer(void)
-//{
-//	//PinIN();
-//	 //I2C_IODect();
-////__bic_SR_register_on_exit(LPM0_bits );
-//}
+#pragma vector=WDT_VECTOR
+__interrupt void watchdog_timer(void)
+{
+	//PinIN();
+	 //I2C_IODect();
+__bic_SR_register_on_exit(LPM0_bits );
+}
 /**********时钟修改函数***********/
 void SEL_PLUS()
 {
@@ -165,9 +166,9 @@ void I2C_IO12_Onclick()
 	PinOUT(5,turn);         //指定5号管脚输出为0&1
 	PinOUT(4,turn);         //指定4号管脚输出为0&1
 	if(p_s_flag==1)
-			DCO_PLUS();
+			MOD_PLUS();
 	else
-			DCO_SUB();
+			MOD_SUB();
 	BCSCTL1&=0xF0;
 	BCSCTL1|=SEL_temp;
 	DCOCTL =DCO_temp+MOD_temp;
@@ -181,14 +182,14 @@ void I2C_IO13_Onclick()
 	if(p_s_flag==1)
 	{
 		p_s_flag=0;
-		PinOUT(6,0);
-		PinOUT(7,0);
+		PinOUT(6,1);
+		PinOUT(7,1);
 	}
 	else
 	{
 		p_s_flag=1;
-		PinOUT(6,1);
-		PinOUT(7,1);
+		PinOUT(6,0);
+		PinOUT(7,0);
 	}
 
 }
