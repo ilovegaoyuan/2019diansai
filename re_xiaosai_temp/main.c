@@ -191,7 +191,7 @@ void timer0_init()
 
   //----设置TACCRx的值-----
   //TACCR0=32768-1;     //时钟是32.768K,那么值设为32678-1
-  TA0CCR0=1361-1;
+  TA0CCR0=1345-1;
   //TACCR1=10000;         //TACCR1和TACCR2要小于TACCR0,否则不会产生中断
   //TACCR2=20000;
 
